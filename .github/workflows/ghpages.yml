@@ -21,7 +21,7 @@ jobs:
         run: dotnet nuget add source https://www.myget.org/F/websharper-developers/api/v3/index.json --name WebSharper.Developers --username F2W7MV --password ${{ secrets.WEBSHARPER_FEED }} --store-password-in-clear-text
 
       - name: Build
-        run: dotnet publish -c Release
+        run: dotnet publish ./MySPA01.fsproj -c Release
 
       - name: Feltöltés GitHub Pages-re
         uses: peaceiris/actions-gh-pages@v3
