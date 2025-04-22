@@ -1,0 +1,30 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main  # ha nálad a főág neve "master", akkor ezt írd át arra
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Letöltés
+        uses: actions/checkout@v2
+
+      - name: .NET telepítése
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: WebSharper feed hozzáadása
+        run: dotnet nuget add source https://www.myget.org/F/websharper-developers/api/v3/index.json --name WebSharper.Developers --username F2W7MV --password ${{ secrets.WEBSHARPER_FEED }} --store-password-in-clear-text
+
+      - name: Build
+        run: dotnet publish -c Release
+
+      - name: Feltöltés GitHub Pages-re
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./bin/Release/net7.0/publish
